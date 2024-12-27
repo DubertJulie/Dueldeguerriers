@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.ComponentModel;
+using System.Reflection.PortableExecutable;
 using System.Security.Cryptography.X509Certificates;
 using dueldeguerriers.Classes;
 
@@ -9,11 +11,14 @@ namespace MyApp
     {
         static void Main(string[] args)
         {
+            List<Guerrier> GuerrierListe = new List<Guerrier>();
+
 
             void AfficherMenu()
             {
+                Console.WriteLine("UN TRUC\n\n");
                 Console.WriteLine("--- Menu ---");
-                Console.WriteLine("1 - Ajouter un guerrier \n2 - Lancer un duel \n3 - Lancer un tournoi");
+                Console.WriteLine("1 - Ajouter un guerrier \n2 - Afficher la liste des guerriers \n3 - Lancer un tournoi");
                 ConsoleKeyInfo key;
 
                 key = Console.ReadKey();
@@ -47,12 +52,69 @@ namespace MyApp
 
             void AjouterGuerrier()
             {
-                Console.WriteLine("test menu 1");
+                // while pas esc 
+                int compteur = 0;
+                while (compteur < 2)
+                {
+                    Console.WriteLine("--- Ajouter un Guerrier ---\n\n");
+                    Console.WriteLine("Quelle est la classe de votre guerrier ?");
+                    Console.WriteLine("1 - Guerrier classique \n2 - Nain guerrier \n3 - Elfe Guerrier");
+                    int choix = int.Parse(Console.ReadLine());
+                    string classe = "";
+                    switch(choix)
+                    {
+                        case 1:
+                            classe = "Guerrier";
+                            break;
+                        case 2:
+                            classe = "Nain";
+                            break;
+                        case 3:
+                            classe = "Elfe";
+                            break;
+                        default:
+                            Console.WriteLine("Erreur de saisie");
+                            break;
+                    }
+
+                    Console.WriteLine("Comment s'apelle votre guerrier ?");
+                    string NomGuerrier = Console.ReadLine();
+
+                    Console.WriteLine("Combien de points de vie a-t-il ? (entre 1 et 50)");
+                    int PdV = int.Parse(Console.ReadLine());
+
+                    Console.WriteLine("Quel est son nombre d'attaques ?");
+                    int NoA = int.Parse(Console.ReadLine());
+
+                    if (classe == "Guerrier")
+                    {
+                        Guerrier ajout = new Guerrier(NomGuerrier, PdV, NoA);
+                        GuerrierListe.Add(ajout);
+                        compteur++;
+                    } else if (classe == "Nain")
+                    {
+                        Elfe ajout = new Elfe(NomGuerrier, PdV, NoA);
+                        GuerrierListe.Add(ajout);
+                        compteur++;
+                    } else
+                    {
+                        Nain ajout = new Nain(NomGuerrier, PdV, NoA, true);
+                        GuerrierListe.Add((ajout));
+                        compteur++;
+                    }
+                }
+
+                AfficherMenu();
             }
 
             void AfficherListeGuerriers()
             {
-                Console.WriteLine("test menu 2");
+                foreach (var obj in GuerrierListe)
+                {
+                    Console.WriteLine(obj.GetType().Name + " " + obj.Nom + " " + obj.PointsDeVie + " " + obj.NbDesAttaques);
+                }
+                AfficherMenu();
+
             }
 
             void LancerTournoi()
@@ -77,9 +139,6 @@ namespace MyApp
             //whitney.SubirDegats(sydney.Attaquer());
             //whitney.AfficherInfos();
         }
-
-
-
 
     }
 }
